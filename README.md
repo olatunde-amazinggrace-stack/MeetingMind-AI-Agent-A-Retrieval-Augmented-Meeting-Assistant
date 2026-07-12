@@ -23,6 +23,12 @@ MeetingMind AI Agent is a Retrieval-Augmented Generation (RAG) application that 
 - PyPDF
 
 ## Installation
+## Functionality of the Application
+You can check the functionality of this model by clicking the drive's link below:
+Here is a link to the Web Application
+
+https://meetingmind-ai-agent-a-retrieval-augmented-meeting-assistant-j.streamlit.app/
 
 ```bash
 pip install -r requirements.txt
+##
