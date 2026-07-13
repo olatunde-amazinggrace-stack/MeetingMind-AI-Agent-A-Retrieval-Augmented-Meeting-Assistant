@@ -157,21 +157,26 @@ else:
                 st.success(f"Loaded {len(documents)} pages.")
 
             # Split into chunks
-            with st.spinner("Splitting document into chunks..."):              text_splitter = RecursiveCharacterTextSplitter(
-                    chunk_size=800,
-                    chunk_overlap=100
-                )
-                chunks = text_splitter.split_documents(documents)
-                st.success(f"Created {len(chunks)} chunks.")
+            with st.spinner("Splitting document into chunks..."):
+    text_splitter = RecursiveCharacterTextSplitter(
+        chunk_size=800,
+        chunk_overlap=100
+    )
 
+    chunks = text_splitter.split_documents(documents)
+    st.success(f"Created {len(chunks)} chunks.")
             # Embed chunks and store in ChromaDB
-            with st.spinner("Embedding chunks and creating vector store (this may take a moment)... "):n                embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
-                st.session_state.vectorstore = Chroma.from_documents(
-                    documents=chunks,
-                    embedding=embeddings
-                )
-                st.success("Vector store created successfully!")
+          with st.spinner("Embedding chunks and creating vector store (this may take a moment)..."):
+    embeddings = HuggingFaceEmbeddings(
+        model_name="all-MiniLM-L6-v2"
+    )
 
+    st.session_state.vectorstore = Chroma.from_documents(
+        documents=chunks,
+        embedding=embeddings
+    )
+
+    st.success("Vector store created successfully!")
     # Q&A Section
     if st.session_state.pdf_uploaded and st.session_state.vectorstore is not None:
         st.markdown("--- ")
@@ -210,10 +215,10 @@ else:
 
                         user_prompt = f"""You are an AI assistant designed to extract and summarize information from meeting transcripts.\nBased on the following CONTEXT from the meeting, please answer the QUESTION.\nYour answer should be as comprehensive and informative as possible, drawing all relevant details and making logical inferences *only* from the provided CONTEXT.\nIf the CONTEXT does not contain enough information to provide a direct answer, or if the information is entirely absent, explain what information is missing or state that the answer cannot be found within the document.\nDo not use any external knowledge.\n\nCONTEXT:\n{context}\n\nQUESTION:\n{question}\n"""
 
-                        try: # Added try block
-                            response = llm.invoke(user_prompt)
-                            answer = response.content[0]["text"]
-                        except ChatGoogleGenerativeAIError as e: # Catch specific error
+                        try:
+ response = llm.invoke(user_prompt)
+    answer = response.content
+except ChatGoogleGenerativeAIError as e: # Catch specific error
                             st.error(f"**Gemini API Error:** {e}")
                             st.error("This often means your Google API Key is invalid, expired, or you've exceeded your quota.")
                             st.error("1. Please double-check your `GOOGLE_API_KEY` in Colab's secret manager (the '🔑' icon on the left panel) and ensure it's correct and active.")
