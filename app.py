@@ -156,12 +156,15 @@ else:
                 documents = loader.load()
                 st.success(f"Loaded {len(documents)} pages.")
 
-            # Split into chunks
-            with st.spinner("Splitting document into chunks..."):
-    text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=800,
-        chunk_overlap=100
+           # Split into chunks
+           with st.spinner("Splitting document into chunks..."):
+             text_splitter = RecursiveCharacterTextSplitter(
+                chunk_size=800,
+                chunk_overlap=100
     )
+
+    chunks = text_splitter.split_documents(documents)
+    st.success(f"Created {len(chunks)} chunks.")
 
     chunks = text_splitter.split_documents(documents)
     st.success(f"Created {len(chunks)} chunks.")
