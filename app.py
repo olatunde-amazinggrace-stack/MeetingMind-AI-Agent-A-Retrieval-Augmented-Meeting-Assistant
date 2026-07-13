@@ -157,7 +157,7 @@ else:
                 st.success(f"Loaded {len(documents)} pages.")
 
             # Split into chunks
-            with st.spinner("Splitting document into chunks..."):n                text_splitter = RecursiveCharacterTextSplitter(
+            with st.spinner("Splitting document into chunks..."):              text_splitter = RecursiveCharacterTextSplitter(
                     chunk_size=800,
                     chunk_overlap=100
                 )
