@@ -153,7 +153,9 @@ else:
             # Load the document
             with st.spinner("Loading PDF..."):
                 loader = PyPDFLoader(doc_filename)
+                st.write("✅ PDF loaded")
                 documents = loader.load()
+                st.write("✅ Document loaded")
                 st.success(f"Loaded {len(documents)} pages.")
 
             # Split into chunks
@@ -164,10 +166,15 @@ else:
                 )
                 chunks = text_splitter.split_documents(documents)
                 st.success(f"Created {len(chunks)} chunks.")
+                st.write("✅ Chunks created")
 
             # Embed chunks and store in ChromaDB
             with st.spinner("Embedding chunks and creating vector store (this may take a moment)... "):
+                st.write("⏳ Loading embedding model...")
                 embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+                st.write("✅ Embedding model loaded")
+                st.write("⏳ Creating vector database...")
+                st.write("✅ Vector database created")
                 st.session_state.vectorstore = Chroma.from_documents(
                     documents=chunks,
                     embedding=embeddings
