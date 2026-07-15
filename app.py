@@ -13,6 +13,12 @@ from langchain_community.vectorstores import Chroma
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_google_genai.chat_models import ChatGoogleGenerativeAIError
 
+@st.cache_resource
+def load_embeddings():
+    return HuggingFaceEmbeddings(
+        model_name="sentence-transformers/all-MiniLM-L6-v2"
+    )
+
 # Authentication and DB
 from auth_db import init_db, register_user, verify_user, save_conversation, get_conversations
 
@@ -128,8 +134,7 @@ else:
 
     # Gemini API Key input (using st.secrets for security)
     gemini_api_key = st.secrets.get("GOOGLE_API_KEY", "")
-    hf_token = st.secrets.get("HF_TOKEN", "") # Get HF Token from Streamlit secrets
-
+    
     with st.container(border=True):
         st.subheader("Upload Your Meeting Transcript (PDF)")
         uploaded_file = st.file_uploader("Choose a PDF file to analyze", type="pdf", label_visibility="collapsed")
@@ -157,21 +162,21 @@ else:
 
             with st.spinner("Splitting document into chunks..."):
                 text_splitter = RecursiveCharacterTextSplitter(
-                    chunk_size=800,
-                    chunk_overlap=100
+                    chunk_size=1200,
+                    chunk_overlap=200
                 )
                 chunks = text_splitter.split_documents(documents)
                 st.success(f"Created {len(chunks)} chunks.")
 
-            with st.spinner("Embedding chunks and creating vector store (this may take a moment)... परिस्थिति:"):
-                # Pass the HF Token to HuggingFaceEmbeddings
-                embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2", huggingfacehub_api_token=hf_token)
+            with st.spinner("Embedding chunks and creating vector store (this may take a moment)..."):
+                embeddings = load_embeddings()
+
                 st.session_state.vectorstore = Chroma.from_documents(
                     documents=chunks,
                     embedding=embeddings
                 )
-                st.success("Vector store created successfully!")
 
+                st.success("Vector store created successfully!")
     if st.session_state.pdf_uploaded and st.session_state.vectorstore is not None:
         st.markdown("--- ")
         with st.container(border=True):
@@ -181,8 +186,6 @@ else:
             if st.button("Get Answer"):
                 if not gemini_api_key:
                     st.error("Google API Key not found in Streamlit Secrets. Please ensure it's set.")
-                elif not hf_token: # Added check for HF token
-                    st.error("Hugging Face Token (HF_TOKEN) not found in Streamlit secrets. Please ensure it's set.")
                 else:
                     llm = ChatGoogleGenerativeAI(
                         model="gemini-3.5-flash",
@@ -192,7 +195,7 @@ else:
 
                     def ask_document(question):
                         retriever = st.session_state.vectorstore.as_retriever(
-                            search_kwargs={"k": 5}
+                            search_kwargs={"k": 8}
                         )
 
                         retrieved_chunks = retriever.invoke(question)
@@ -212,7 +215,7 @@ else:
 
                         try:
                             response = llm.invoke(user_prompt)
-                            answer = response.content[0]["text"]
+                            answer = response.content
                         except ChatGoogleGenerativeAIError as e:
                             st.error(f"**Gemini API Error:** {e}")
                             st.error("This often means your Google API Key is invalid, expired, or you've exceeded your quota.")
