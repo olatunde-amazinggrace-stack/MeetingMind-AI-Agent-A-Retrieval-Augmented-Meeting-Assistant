@@ -214,8 +214,15 @@ else:
                         user_prompt = f"""You are an AI assistant designed to extract and summarize information from meeting transcripts.\nBased on the following CONTEXT from the meeting, please answer the QUESTION.\nYour answer should be as comprehensive and informative as possible, drawing all relevant details and making logical inferences *only* from the provided CONTEXT.\nIf the CONTEXT does not contain enough information to provide a direct answer, or if the information is entirely absent, explain what information is missing or state that the answer cannot be found within the document.\nDo not use any external knowledge.\n\nCONTEXT:\n{context}\n\nQUESTION:\n{question}\n"""
 
                         try:
-                            response = llm.invoke(user_prompt)
-                            answer = response.content
+                           response = llm.invoke(user_prompt)
+
+                            if isinstance(response.content, list):
+                                answer = "\n".join(
+                                    str(item.get("text", item)) if isinstance(item, dict) else str(item)
+                                    for item in response.content
+                                )
+                            else:
+                                answer = str(response.content)
                         except ChatGoogleGenerativeAIError as e:
                             st.error(f"**Gemini API Error:** {e}")
                             st.error("This often means your Google API Key is invalid, expired, or you've exceeded your quota.")
@@ -235,7 +242,8 @@ else:
 
                         # Save conversation
                         save_conversation(st.session_state.user_id, question_input, answer)
-
+                        st.write(type(answer)) 
+                    
                         # Removed the st.expander that displayed source chunks
     else:
         st.info("Please upload a PDF document to begin asking questions.")
