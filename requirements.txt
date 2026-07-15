@@ -2,7 +2,7 @@
 streamlit
 langchain
 langchain-community
-langchain-google-genai
+langchain-groq
 langchain-text-splitters
 chromadb
 pypdf
@@ -11,4 +11,4 @@ torch
 transformers
 bcrypt
 torchvision
-langchain-huggingface # Added new requirement
+
