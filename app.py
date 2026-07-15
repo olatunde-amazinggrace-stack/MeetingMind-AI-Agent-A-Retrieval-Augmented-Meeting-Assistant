@@ -213,14 +213,16 @@ else:
 
                         user_prompt = f"""You are an AI assistant designed to extract and summarize information from meeting transcripts.\nBased on the following CONTEXT from the meeting, please answer the QUESTION.\nYour answer should be as comprehensive and informative as possible, drawing all relevant details and making logical inferences *only* from the provided CONTEXT.\nIf the CONTEXT does not contain enough information to provide a direct answer, or if the information is entirely absent, explain what information is missing or state that the answer cannot be found within the document.\nDo not use any external knowledge.\n\nCONTEXT:\n{context}\n\nQUESTION:\n{question}\n"""
 
-                        try:
-                            response = llm.invoke(user_prompt)
+                      try:
+                        response = llm.invoke(user_prompt)
+                        answer = str(response.content)
 
-                            if isinstance(response.content, list):
-                                answer = "\n".join(
-                                    str(item.get("text", item)) if isinstance(item, dict) else str(item)
-                                    for item in response.content
-                                )
+                    except Exception as e:
+                        st.error(f"Gemini Error: {e}")
+                        return (
+                            "⚠️ Gemini is temporarily unavailable. Please try again in a few moments.",
+                            []
+                        )
                             else:
                                 answer = str(response.content)
 
