@@ -242,7 +242,6 @@ else:
 
                         # Save conversation
                         save_conversation(st.session_state.user_id, question_input, answer)
-                        st.write(type(answer)) 
                     
                         # Removed the st.expander that displayed source chunks
     else:
