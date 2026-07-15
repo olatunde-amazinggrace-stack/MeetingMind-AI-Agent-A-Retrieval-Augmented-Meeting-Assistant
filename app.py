@@ -25,7 +25,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-st.image("/content/meetingmind_banner.png", use_column_width=True)
+st.image("meetingmind_banner.png", use_container_width=True)
 
 # Initialize the database
 init_db()
