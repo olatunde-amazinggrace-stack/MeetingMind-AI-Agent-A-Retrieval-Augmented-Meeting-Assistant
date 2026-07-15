@@ -1,0 +1,14 @@
+
+streamlit
+langchain
+langchain-community
+langchain-text-splitters
+langchain-huggingface
+langchain-groq  # Added new requirement for Groq
+chromadb
+pypdf
+sentence-transformers
+torch
+transformers
+bcrypt
+torchvision
