@@ -224,16 +224,6 @@ else:
                                 []
                             )
 
-                        return answer, deduplicated_chunks
-                        
-                            st.error(f"**Gemini API Error:** {e}")
-                            st.error("This often means your Google API Key is invalid, expired, or you've exceeded your quota.")
-                            st.error("1. Please double-check your GOOGLE_API_KEY in Streamlit Secrets.")
-                            st.error("2. If the key is correct, try a simpler question.")
-                            st.error("3. Check your Google AI Studio quota.")
-                            return "An error occurred while generating the answer.", []
-
-                        return answer, deduplicated_chunks
                     with st.spinner("Generating answer with Gemini..."):
                         answer, source_chunks = ask_document(question_input)
 
