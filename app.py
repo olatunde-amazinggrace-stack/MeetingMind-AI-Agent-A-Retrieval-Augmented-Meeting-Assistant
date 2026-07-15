@@ -214,7 +214,7 @@ else:
                         user_prompt = f"""You are an AI assistant designed to extract and summarize information from meeting transcripts.\nBased on the following CONTEXT from the meeting, please answer the QUESTION.\nYour answer should be as comprehensive and informative as possible, drawing all relevant details and making logical inferences *only* from the provided CONTEXT.\nIf the CONTEXT does not contain enough information to provide a direct answer, or if the information is entirely absent, explain what information is missing or state that the answer cannot be found within the document.\nDo not use any external knowledge.\n\nCONTEXT:\n{context}\n\nQUESTION:\n{question}\n"""
 
                         try:
-                           response = llm.invoke(user_prompt)
+                            response = llm.invoke(user_prompt)
 
                             if isinstance(response.content, list):
                                 answer = "\n".join(
@@ -223,16 +223,16 @@ else:
                                 )
                             else:
                                 answer = str(response.content)
+
                         except ChatGoogleGenerativeAIError as e:
                             st.error(f"**Gemini API Error:** {e}")
                             st.error("This often means your Google API Key is invalid, expired, or you've exceeded your quota.")
-                            st.error("1. Please double-check your `GOOGLE_API_KEY` in Colab's secret manager (the '🔑' icon on the left panel) and ensure it's correct and active.")
-                            st.error("2. If the key is correct, try a simpler question to rule out content policy violations.")
-                            st.error("3. If the problem persists, check your Google AI Studio dashboard for API usage limits or errors.")
-                            return "An error occurred while generating the answer. Please check the troubleshooting steps above.", []
+                            st.error("1. Please double-check your GOOGLE_API_KEY in Streamlit Secrets.")
+                            st.error("2. If the key is correct, try a simpler question.")
+                            st.error("3. Check your Google AI Studio quota.")
+                            return "An error occurred while generating the answer.", []
 
                         return answer, deduplicated_chunks
-
                     with st.spinner("Generating answer with Gemini..."):
                         answer, source_chunks = ask_document(question_input)
 
