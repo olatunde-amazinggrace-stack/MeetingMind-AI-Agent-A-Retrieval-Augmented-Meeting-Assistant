@@ -161,8 +161,8 @@ else:
             # Split into chunks
             with st.spinner("Splitting document into chunks..."):
                 text_splitter = RecursiveCharacterTextSplitter(
-                    chunk_size=800,
-                    chunk_overlap=100
+                    chunk_size=1500,
+                    chunk_overlap=250
                 )
                 chunks = text_splitter.split_documents(documents)
                 st.success(f"Created {len(chunks)} chunks.")
@@ -201,7 +201,7 @@ else:
 
                     def ask_document(question):
                         retriever = st.session_state.vectorstore.as_retriever(
-                            search_kwargs={"k": 5}
+                            search_kwargs={"k": 10}
                         )
 
                         retrieved_chunks = retriever.invoke(question)
