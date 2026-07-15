@@ -213,18 +213,18 @@ else:
 
                         user_prompt = f"""You are an AI assistant designed to extract and summarize information from meeting transcripts.\nBased on the following CONTEXT from the meeting, please answer the QUESTION.\nYour answer should be as comprehensive and informative as possible, drawing all relevant details and making logical inferences *only* from the provided CONTEXT.\nIf the CONTEXT does not contain enough information to provide a direct answer, or if the information is entirely absent, explain what information is missing or state that the answer cannot be found within the document.\nDo not use any external knowledge.\n\nCONTEXT:\n{context}\n\nQUESTION:\n{question}\n"""
 
-                     try:
-                        response = llm.invoke(user_prompt)
-                        answer = str(response.content)
+                        try:
+                            response = llm.invoke(user_prompt)
+                            answer = str(response.content)
 
-                    except Exception as e:
-                        st.error(f"Gemini Error: {e}")
-                        return (
-                            "⚠️ Gemini is temporarily unavailable. Please try again in a few moments.",
-                            []
-                        )
+                        except Exception as e:
+                            st.error(f"Gemini Error: {e}")
+                            return (
+                                "⚠️ Gemini is temporarily unavailable. Please try again in a few moments.",
+                                []
+                            )
 
-                    return answer, deduplicated_chunks
+                        return answer, deduplicated_chunks
                         
                             st.error(f"**Gemini API Error:** {e}")
                             st.error("This often means your Google API Key is invalid, expired, or you've exceeded your quota.")
