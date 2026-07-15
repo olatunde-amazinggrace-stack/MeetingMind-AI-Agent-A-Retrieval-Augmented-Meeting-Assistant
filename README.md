@@ -38,7 +38,7 @@ https://drive.google.com/file/d/1BPN5zkt1VYyQqy0_sqOuYh68HtpY2sU5/view?usp=shari
 ## Link to the Application
 Here is a link to the Web Application
 
-https://meetingmind-ai-agent-a-retrieval-augmented-meeting-assistant-j.streamlit.app/
+(https://meetingmind-ai-agent-a-retrieval-augmented-meeting-assistant-f.streamlit.app/)
 
 
 ## Usage
